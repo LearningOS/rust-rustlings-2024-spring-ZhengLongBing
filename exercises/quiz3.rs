@@ -16,7 +16,7 @@
 //
 // Execute `rustlings hint quiz3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 pub struct ReportCard {
     pub grade: f32,
@@ -26,8 +26,34 @@ pub struct ReportCard {
 
 impl ReportCard {
     pub fn print(&self) -> String {
-        format!("{} ({}) - achieved a grade of {}",
+        if self.student_name=="Gary Plotter"{
+            let grade=match self.grade {
+                x if x>=1.0&& x<1.25=>"A+",
+                x if x>=1.25&&x<1.5=> "A",
+                x if x>=1.5&& x<1.75=>"A-",
+                x if x>=1.75&&x<2.0=> "B+",
+                x if x>=2.0&& x<2.25=>"B",
+                x if x>=2.25&&x<2.5=> "B-",
+                x if x>=2.5&& x<2.75=>"C+",
+                x if x>=2.75&&x<3.0=> "C",
+                x if x>=3.0&& x<3.25=>"C-",
+                x if x>=3.25&&x<3.5=> "D+",
+                x if x>=3.5&& x<3.75=>"D",
+                x if x>=3.75&&x<4.0=> "D-",
+                x if x>=4.0&& x<4.25=>"E+",
+                x if x>=4.25&&x<4.5=> "E",
+                x if x>=4.5&& x<4.75=>"E-",
+                x if x>=4.75&&x<5.0=> "F+",
+                x if x>=5.0&& x<5.25=>"F",
+                x if x>=5.25&&x<5.5=> "F-",
+                _=>panic!()
+            };
+            format!("{} ({}) - achieved a grade of {}",
+            &self.student_name, &self.student_age, grade)
+        }else{
+            format!("{} ({}) - achieved a grade of {}",
             &self.student_name, &self.student_age, &self.grade)
+        }
     }
 }
 
@@ -52,7 +78,7 @@ mod tests {
     fn generate_alphabetic_report_card() {
         // TODO: Make sure to change the grade here after you finish the exercise.
         let report_card = ReportCard {
-            grade: 2.1,
+            grade: 1.1,
             student_name: "Gary Plotter".to_string(),
             student_age: 11,
         };
