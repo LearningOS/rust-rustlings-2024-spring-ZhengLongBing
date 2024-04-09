@@ -8,7 +8,7 @@
 
 #[allow(unused_variables, unused_assignments)]
 fn main() {
-    let my_option: Option<()> = None;
+    let my_option: Option<()> = Some(());
     if my_option.is_none() {
         panic!()
     }
