@@ -27,7 +27,7 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
+
 
 // Your task is to complete this implementation and return an Ok result of inner
 // type Color. You need to create an implementation for a tuple of three
@@ -41,6 +41,16 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        match tuple {
+            (red @ 0.. ,green @ 0.., blue @ 0..)=>Ok(
+                Color{
+                    red:red.try_into().map_err(|_| IntoColorError::IntConversion)?,
+                    green:green.try_into().map_err(|_| IntoColorError::IntConversion)?,
+                    blue:blue.try_into().map_err(|_| IntoColorError::IntConversion)?,
+                }
+            ),
+            _=>Err(IntoColorError::IntConversion),
+        }
     }
 }
 
@@ -48,6 +58,16 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        match arr {
+            [red @ (0..) ,green @ (0..), blue @ (0..)]=>Ok(
+                Color{
+                    red:red.try_into().map_err(|_| IntoColorError::IntConversion)?,
+                    green:green.try_into().map_err(|_| IntoColorError::IntConversion)?,
+                    blue:blue.try_into().map_err(|_| IntoColorError::IntConversion)?,
+                }
+            ),
+            _=>Err(IntoColorError::IntConversion),
+        }
     }
 }
 
@@ -55,6 +75,17 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        match slice {
+            [red @ (0..) ,green @ (0..), blue @ (0..)]=>Ok(
+                Color{
+                    red:(*red).try_into().map_err(|_| IntoColorError::IntConversion)?,
+                    green:(*green).try_into().map_err(|_| IntoColorError::IntConversion)?,
+                    blue:(*blue).try_into().map_err(|_| IntoColorError::IntConversion)?,
+                }
+            ),
+            [_,_,_]=>Err(IntoColorError::IntConversion),
+            _=>Err(IntoColorError::BadLen)
+        }
     }
 }
 

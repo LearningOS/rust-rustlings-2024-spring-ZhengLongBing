@@ -2,7 +2,7 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -69,17 +69,58 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
-        }
-	}
 }
+impl<T> LinkedList<T>
+where
+    T: Ord,
+{
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self {
+        let mut merged_list = LinkedList::new();
 
+        while list_a.start.is_some() && list_b.start.is_some() {
+            let val_a = unsafe { &(*list_a.start.unwrap().as_ptr()).val };
+            let val_b = unsafe { &(*list_b.start.unwrap().as_ptr()).val };
+
+            if val_a <= val_b {
+                let node = list_a.start.take().unwrap();
+                list_a.start = unsafe { (*node.as_ptr()).next };
+                merged_list.append_node(node);
+            } else {
+                let node = list_b.start.take().unwrap();
+                list_b.start = unsafe { (*node.as_ptr()).next };
+                merged_list.append_node(node);
+            }
+        }
+
+        // 如果一个链表为空，将另一个链表的剩余部分直接连接到结果链表的末尾
+        if list_a.start.is_some() {
+            merged_list.append_remaining(list_a);
+        } else {
+            merged_list.append_remaining(list_b);
+        }
+
+        merged_list
+    }
+
+    fn append_node(&mut self, mut node: NonNull<Node<T>>) {
+        unsafe {
+            (*node.as_ptr()).next = None;
+        }
+        match self.end {
+            None => self.start = Some(node),
+            Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = Some(node) },
+        }
+        self.end = Some(node);
+        self.length += 1;
+    }
+    
+    fn append_remaining(&mut self, mut list: LinkedList<T>) {
+        while let Some(node)=list.start.take() {
+            list.start = unsafe { (*node.as_ptr()).next };
+            self.append_node(node);
+        }
+    }
+}
 impl<T> Display for LinkedList<T>
 where
     T: Display,

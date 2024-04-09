@@ -3,10 +3,30 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+
+use std::vec;
+
+fn sort<T:Ord+Copy+core::fmt::Debug>(array: &mut [T]){
+	fn quick_sort<T:Ord+Copy>(arr:Vec<T>)->Vec<T>{
+        match arr.as_slice() {
+            []=>vec![],
+            [x]=>vec![*x],
+            [prev,next @ .. ]=>{
+                let front=next.iter().filter(|&x| x<=prev).copied().collect();
+                let back=next.iter().filter(|&x| x>prev).copied().collect();
+                let front=quick_sort(front).into_iter();
+                let back=quick_sort(back).into_iter();
+                let mid=Some(*prev).into_iter();
+                front.chain(mid).chain(back).collect()
+            }
+        }
+    }
+    let vec=quick_sort(array.iter().copied().collect());
+    println!("{:?}",vec);
+    array.iter_mut().zip(vec.into_iter())
+        .map(|(x,y)|*x=y)
+        .for_each(|_|{});
 }
 #[cfg(test)]
 mod tests {

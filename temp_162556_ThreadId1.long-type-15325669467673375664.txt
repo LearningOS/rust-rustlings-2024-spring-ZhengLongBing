@@ -1,0 +1,1 @@
+Map<Zip<std::slice::IterMut<'_, T>, std::iter::Chain<Copied<Filter<std::slice::Iter<'_, T>, {closure@exercises/algorithm/algorithm3.rs:15:41: 15:45}>>, Copied<Filter<std::slice::Iter<'_, T>, {closure@exercises/algorithm/algorithm3.rs:16:40: 16:44}>>>>, _>
