@@ -2,7 +2,7 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +37,16 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value); // 将新元素添加到数组的末尾
+        self.count += 1;
+        let mut idx = self.count;
+
+        // 上浮：将新添加的元素移动到正确的位置以维持堆的特性
+        while idx > 1 && (self.comparator)(&self.items[self.parent_idx(idx)], &self.items[idx]) {
+            let parent_idx=self.parent_idx(idx);
+            self.items.swap(idx, parent_idx);
+            idx = self.parent_idx(idx);
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -57,8 +66,23 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        if !self.children_present(idx) {
+            return 0; // 如果没有子节点，则返回0
+        }
+        
+        let left_idx = self.left_child_idx(idx);
+        let right_idx = self.right_child_idx(idx);
+        
+        if right_idx > self.count {
+            return left_idx; // 如果只有左子节点，则返回左子节点的索引
+        }
+        
+        // 根据comparator函数比较左右子节点，选择较小（或较大）的一个
+        if (self.comparator)(&self.items[left_idx], &self.items[right_idx]) {
+            left_idx
+        } else {
+            right_idx
+        }
     }
 }
 
@@ -84,8 +108,12 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.count!=0{
+            self.count-=1;
+            self.items.pop()
+        }else{
+            None
+        }
     }
 }
 
